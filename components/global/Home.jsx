@@ -1,9 +1,14 @@
 import React from "react";
+import { useAppSelector } from "../../redux/hooks";
 
 const Home = () => {
-
+    const { logged } = useAppSelector(state => state.session);
     return(
-        <div>Llegaste!!</div>
+        <>
+            { logged && 
+                <div>Home</div>
+            }
+        </>
     )
 };
 

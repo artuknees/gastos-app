@@ -7,8 +7,13 @@ const Reset = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     useEffect(() => {
-        localStorage.setItem('logged', 'false')
-        localStorage.setItem('user', JSON.stringify({}))
+        if(localStorage.getItem('logged')) {
+            localStorage.setItem('logged', 'false')
+            localStorage.setItem('user', JSON.stringify({}))    
+        } else {
+            sessionStorage.setItem('logged', 'false')
+            sessionStorage.setItem('user', JSON.stringify({}))    
+        }
         dispatch(setSession(false))
         dispatch(setUser({}))
         router.push('/auth/login')

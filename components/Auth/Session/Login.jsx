@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../../redux/hooks";
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
+// import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -17,51 +17,55 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-
+// import { blue , red } from "@mui/material/colors";
+import Swal from "sweetalert2";
+import { swalWrong } from "../../../config/swalConfig";
 
 
 const Login = () => {
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const [invalidUser, setInvalidUser] = useState(false)
     const [userData, setUserData] = useState({
         username: '',
-        password: ''
-    })
+        password: '',
+    });
+    const [remember , setRemember] = useState(false);
 
-    // useEffect(() => {
-    //     if(localStorage.getItem('logged') === 'true') {
-    //         router.push('/users')
-    //     }
-    // }, [router])
+    useEffect(() => {
+        if(localStorage.getItem('logged') === 'true' || sessionStorage.getItem('logged') === 'true') {
+            router.push('/')
+        }
+    },[])
 
     const execLogIn = async (logData) => {
         event.preventDefault();
         const data = {...logData};
-        console.log(data)
-        // try {
-        //     const rsp = await axios.post(endpoints('user_login'), data);
-        //     if (rsp.status === 401){
-        //         console.log('failed: ', rsp.data)
-        //     } else if (rsp.status === 200) {
-        //         setInvalidUser(false)
-        //         console.log('response backend: ', rsp.data)
-        //         localStorage.setItem('logged', 'true')
-        //         localStorage.setItem('user', JSON.stringify(rsp.data));
-        //         dispatch(setSession(true));
-        //         dispatch(setUser(rsp.data));
-        //         router.push('/');
-        //     }
-        // } catch(err){
-        //     console.log(err)
-        //     if(err.response.status === 401) {
-        //         console.log(err.response.data.message)
-        //         setInvalidUser(true);
+        console.log('data: ', data)
+        console.log('remember: ', remember)
+        try {
+            const rsp = await axios.post(endpoints('user_login'), data);
+            if (rsp.status === 200) {
+                console.log('response backend: ', rsp.data);
+                if (remember) {
+                    localStorage.setItem('logged', 'true')
+                    localStorage.setItem('user', JSON.stringify(rsp.data));
+                } else {
+                    sessionStorage.setItem('logged', 'true');
+                    sessionStorage.setItem('user', JSON.stringify(rsp.data));
+                }
+                dispatch(setSession(true));
+                dispatch(setUser(rsp.data));
+                router.push('/');
+            }
+        } catch(err){
+            if(err.response.status === 401) {
+                Swal.fire({
+                        ...swalWrong,
+                        text: 'Wrong username or password'
+                    })
 
-        //     }
-        // }
-
-
+            }
+        }
 
 
         // try {
@@ -108,7 +112,7 @@ const Login = () => {
             justifyContent:'center'
             }}
         >
-            <CssBaseline />
+            {/* <CssBaseline /> */}
             <Box
                 sx={{
                     display: 'flex',
@@ -150,7 +154,7 @@ const Login = () => {
                         onChange={(e) => setUserData({ ...userData, password: e.target.value})}
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox value="true" color="primary" onChange={(() => setRemember(!remember))}/>}
                         label="Remember me"
                     />
                     <Button

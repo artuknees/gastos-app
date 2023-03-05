@@ -8,25 +8,28 @@ const Auth = ({ children }) => { // this is the global component inside Provider
     const dispatch = useAppDispatch()
 
     useEffect(() => { // sends to login if the user is not logged
-        if(!localStorage.getItem('logged') || localStorage.getItem('logged') === 'false') {
-            router.push('/auth/login')
-        } else {
+        if((!localStorage.getItem('logged') || localStorage.getItem('logged') === 'false') && 
+            (!sessionStorage.getItem('logged') || sessionStorage.getItem('logged') === 'false')) {
+                router.push('/auth/login')
+        } 
+        else {
             // if its logged, info gets dispatched
-            const logged = localStorage.getItem('logged') || null;
-            const user = localStorage.getItem('user') || null
-            dispatch(setSession(JSON.parse(logged)))
-            dispatch(setUser(JSON.parse(user)))
+            let logged = false;
+            let user = {};
+            if (localStorage.getItem('logged')) {
+                logged = localStorage.getItem('logged');
+                user = localStorage.getItem('user');    
+            } else {
+                logged = sessionStorage.getItem('logged');
+                user = sessionStorage.getItem('user');    
+            }
+            dispatch(setSession(JSON.parse(logged)));
+            dispatch(setUser(JSON.parse(user)));
+            router.push('/');
         }
         // eslint-disable-next-line
     }, [router.pathname])
 
-    // useEffect(() => {
-    //     const logged = localStorage.getItem('logged') || null;
-    //     const user = localStorage.getItem('user') || null
-    //     dispatch(setSession(JSON.parse(logged)))
-    //     dispatch(setUser(JSON.parse(user)))
-    //     // eslint-disable-next-line
-    // }, [dispatch])
 
     return (
         <>{children}</>

@@ -4,9 +4,8 @@ import { setUser, setSession } from '../actions/session';
 const initialState = {
   logged: false,
   user: {
-    data: '',
-    token: '',
-    rolesUser: []
+    username: '',
+    password: ''
   }
 }; 
 

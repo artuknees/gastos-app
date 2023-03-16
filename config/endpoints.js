@@ -4,6 +4,9 @@ export const endpoints = (name) => {
 
     const endpoints = {
         user_login: `${BACKEND}/users/login`,
+        expenses:`${BACKEND}/expenses/get`,
+        categories:`${BACKEND}/categories/get`,
+
     }
     return endpoints[name];
 }

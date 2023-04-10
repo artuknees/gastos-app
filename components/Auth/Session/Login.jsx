@@ -7,7 +7,6 @@ import { useAppDispatch } from "../../../redux/hooks";
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-// import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -17,12 +16,14 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-// import { blue , red } from "@mui/material/colors";
 import Swal from "sweetalert2";
 import { swalWrong } from "../../../config/swalConfig";
-
+import { initFirebase } from "../../../firebase";
+import { GoogleAuthProvider , getAuth , signInWithPopup  } from "firebase/auth";
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Login = () => {
+    initFirebase();
     const router = useRouter()
     const dispatch = useAppDispatch()
     const [userData, setUserData] = useState({
@@ -30,13 +31,11 @@ const Login = () => {
         password: '',
     });
     const [remember , setRemember] = useState(false);
-
-    useEffect(() => {
-        if(localStorage.getItem('logged') === 'true' || sessionStorage.getItem('logged') === 'true') {
-            router.push('/')
-        }
-    },[])
-
+    // useEffect(() => {
+    //     if(localStorage.getItem('logged') === 'true' || sessionStorage.getItem('logged') === 'true') {
+    //         router.push('/')
+    //     }
+    // },[])
     const execLogIn = async (logData) => {
         event.preventDefault();
         const data = {...logData};
@@ -66,26 +65,7 @@ const Login = () => {
 
             }
         }
-
-
-        // try {
-        //     const data = {...logData};
-        //     const req = await axios.post(endpoints('user_login'), data);
-        //     if(req.data.token) {
-        //         localStorage.setItem('logged', 'true')
-        //         localStorage.setItem('user', JSON.stringify(req.data));
-        //         dispatch(setSession(true));
-        //         dispatch(setUser(req.data));
-        //         router.push('/');
-        //     }
-        // } catch (err) {
-        //     console.error(err)
-        //     if(err.response.data.error.statusCode == 401) {
-        //         setInvalidUser(true);
-        //     }
-        // }
     }
-
     function Copyright(props) {
         return (
           <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -97,8 +77,51 @@ const Login = () => {
             {'.'}
           </Typography>
         );
-      }
-      
+    }
+
+    const provider = new GoogleAuthProvider();
+    
+    const auth = getAuth(); // instance of auth method
+    const [user, loading] = useAuthState(auth);
+
+    if (loading) {
+        return <div>loading</div>
+    };
+
+    const signIn = async () => { // basic sign in function
+        try {
+            const result = await signInWithPopup(auth,provider);
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            // The signed-in user info.
+            const user = result.user;
+            // IdP data available using getAdditionalUserInfo(result)    
+            console.log({
+                credential: credential,
+                token: token,
+                user: user
+            });
+            localStorage.setItem('logged', 'true');
+            router.push('/')
+            
+        
+        } catch(error) {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            console.log({
+                errorCode: errorCode,
+                errorMessage: errorMessage,
+                email: email,
+                credential: credential
+            })
+        }
+    }
 
     return (
         <Container 
@@ -130,8 +153,9 @@ const Login = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
+                <button className="w-full border h-[48px] bg-red-200 font-semibold" onClick={() => signIn()}>Log in firebase</button>
                 <Box component="form" onSubmit={() => execLogIn(userData)} noValidate sx={{ mt: 1 }}>
-                    <TextField
+                    {/* <TextField
                         margin="normal"
                         required
                         fullWidth
@@ -164,7 +188,7 @@ const Login = () => {
                         sx={{ mt: 3, mb: 2 }}
                     >
                         Sign In
-                    </Button>
+                    </Button> */}
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
@@ -181,34 +205,6 @@ const Login = () => {
             </Box>
             <Copyright sx={{ mt: 8, mb: 4 }} />
         </Container>
-        // <div className="flex flex-col min-h-screen h-full w-full px-4 items-center justify-center pb-10">
-        //         <span className="lg:text-5xl text-4xl text-left place-self-start lg:place-self-center">Welcome to <strong>Cloud <br/>Biomanufacturing</strong></span>
-        //         <form className="flex flex-col mt-20 w-full items-center" onSubmit={() => execLogIn(userData)}>
-        //             <input
-        //                 onChange={(e) => setUserData({ ...userData, username: e.target.value})}
-        //                 type="text"
-        //                 className="border border-black border-opacity-50 bg-gray-200 px-3.5 h-11.5 text-xs w-full lg:w-[335px]"
-        //                 name="username"
-        //                 id="username"
-        //                 placeholder="Username"
-        //             />
-        //             <input
-        //                 onChange={(e) => setUserData({ ...userData, password: e.target.value})}
-        //                 type="password"
-        //                 className="border border-black border-opacity-50 bg-gray-200 px-3.5 h-11.5 mt-5 text-xs w-full lg:w-[335px]"
-        //                 name="password"
-        //                 id="password"
-        //                 placeholder="Password"
-        //             />
-        //             <button type="submit" className={"place-self-center w-full mt-5 rounded-[60px] hover:opacity-80 p-1.5 h-11.5 lg:w-[335px]"}>Log in</button> 
-        //         </form>
-        //     {
-        //         invalidUser &&
-        //         <span className="text-red-500 text-sm mt-5">Username or password are incorrect</span>
-        //     }
-
-
-        // </div>
     );
 }
 

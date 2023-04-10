@@ -4,6 +4,7 @@ import { collection , getDocs } from 'firebase/firestore';
 const getLogin = async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+    console.log('voy a actuar')
     const querySnapshot = await getDocs(collection(db, 'usuarios')); // get de todo lo de 'producto'
     const docs = []; // preparo un array
     querySnapshot.forEach((doc) => { // le pusheo el contenido mas su id.

@@ -1,31 +1,45 @@
 import React,{useEffect,useState} from "react";
 import { useAppSelector } from "../../redux/hooks";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { endpoints } from "../../config/endpoints";
+import {  getAuth   } from "firebase/auth";
+import { initFirebase } from "../../firebase";
+import { useAuthState } from 'react-firebase-hooks/auth';
+
 
 const Home = () => {
-    const { logged , user } = useAppSelector(state => state.session);
+    initFirebase();
+    const auth = getAuth();
+    const router = useRouter();
+    const { logged } = useAppSelector(state => state.session);
     const [categories, setCategories] = useState([]);
     const [expenses, setExpenses] = useState([]);
+    const [user, loading] = useAuthState(auth);
+   
     useEffect(() => {
-        const fetchData = async () => {
-            const allExpenses = (await axios.get(endpoints('expenses'))).data;
-            console.log('all expenses: ', allExpenses);
-            const allCategories = (await axios.get(endpoints('categories'))).data;
-            console.log('all categories: ', allCategories);
-            setExpenses(allExpenses);
-            setCategories(allCategories);
+        if (user){
+            console.log('user: ', user)
+        } else {
+            router.push('/auth/login')
         }
-        fetchData();
-    },[])
+    },[user])
+
+    const logOut = () => {
+        console.log('out');
+        auth.signOut();
+        localStorage.setItem('logged', 'false');
+        console.log('signed out')
+    };
 
     return(
         <div className="w-full h-full flex flex-col">
-            { logged && 
+            { user?.displayName.length > 0  ? 
                 <section>
                     <div>
-                        {`Hola ${user.username}`}
+                        {`Hola ${user?.displayName}`}
                     </div>
+                    <button className='mt-10 w-[350px] bg-red-200' onClick={()=> logOut()}>log out</button>
                     {categories.length > 0 && expenses.length > 0 && 
                         <div>
                             {expenses.map((item, index) => {
@@ -39,7 +53,7 @@ const Home = () => {
                         </div>
                     }
                 </section>
-            }
+            : <div>espera rey</div>}
         </div>
     )
 };

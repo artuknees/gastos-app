@@ -18,13 +18,13 @@ const Auth = ({ children }) => { // this is the global component inside Provider
             let user = {};
             if (localStorage.getItem('logged')) {
                 logged = localStorage.getItem('logged');
-                user = localStorage.getItem('user');    
+                // user = localStorage.getItem('user');    
             } else {
                 logged = sessionStorage.getItem('logged');
-                user = sessionStorage.getItem('user');    
+                // user = sessionStorage.getItem('user');    
             }
             dispatch(setSession(JSON.parse(logged)));
-            dispatch(setUser(JSON.parse(user)));
+            // dispatch(setUser(JSON.parse(user)));
             router.push('/');
         }
         // eslint-disable-next-line

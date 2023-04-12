@@ -1,30 +1,21 @@
 import React,{useEffect,useState} from "react";
-import { useAppSelector } from "../../redux/hooks";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { endpoints } from "../../config/endpoints";
+// import { useAppSelector } from "../../redux/hooks";
+// import axios from "axios";
+// import { useRouter } from "next/router";
+// import { endpoints } from "../../config/endpoints";
 import {  getAuth   } from "firebase/auth";
 import { initFirebase } from "../../firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { CircularProgress } from "@mui/material";
 
 
 const Home = () => {
     initFirebase();
     const auth = getAuth();
-    const router = useRouter();
-    const { logged } = useAppSelector(state => state.session);
     const [categories, setCategories] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [user, loading] = useAuthState(auth);
    
-    useEffect(() => {
-        if (user){
-            console.log('user: ', user)
-        } else {
-            router.push('/auth/login')
-        }
-    },[user])
-
     const logOut = () => {
         console.log('out');
         auth.signOut();
@@ -53,7 +44,10 @@ const Home = () => {
                         </div>
                     }
                 </section>
-            : <div>espera rey</div>}
+            : 
+            <div className="flex flex-col items-center justify-center w-full h-full min-h-screen">
+                <CircularProgress/>
+            </div>}
         </div>
     )
 };

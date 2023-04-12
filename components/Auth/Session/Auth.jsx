@@ -1,35 +1,23 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { setUser, setSession } from "../../../redux/features/actions/session";
-import { useAppDispatch } from "../../../redux/hooks";
+import { initFirebase } from "../../../firebase";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from "firebase/auth";
 
 const Auth = ({ children }) => { // this is the global component inside Provider. Checks always if the user is logged.
+    initFirebase();
     const router = useRouter()
-    const dispatch = useAppDispatch()
-
-    useEffect(() => { // sends to login if the user is not logged
-        if((!localStorage.getItem('logged') || localStorage.getItem('logged') === 'false') && 
-            (!sessionStorage.getItem('logged') || sessionStorage.getItem('logged') === 'false')) {
-                router.push('/auth/login')
-        } 
-        else {
-            // if its logged, info gets dispatched
-            let logged = false;
-            let user = {};
-            if (localStorage.getItem('logged')) {
-                logged = localStorage.getItem('logged');
-                // user = localStorage.getItem('user');    
-            } else {
-                logged = sessionStorage.getItem('logged');
-                // user = sessionStorage.getItem('user');    
-            }
-            dispatch(setSession(JSON.parse(logged)));
-            // dispatch(setUser(JSON.parse(user)));
-            router.push('/');
+    const auth = getAuth(); // instance of auth method
+    const [user, loading] = useAuthState(auth);
+    useEffect(() => { // log in checking
+        if (user){
+            console.log('logueado')
+            router.push('/')
+        } else {
+            console.log('no logueado')
+            router.push('/auth/login')
         }
-        // eslint-disable-next-line
-    }, [router.pathname])
-
+    },[user , router.pathname])
 
     return (
         <>{children}</>

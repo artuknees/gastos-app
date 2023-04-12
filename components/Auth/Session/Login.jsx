@@ -21,51 +21,11 @@ import { swalWrong } from "../../../config/swalConfig";
 import { initFirebase } from "../../../firebase";
 import { GoogleAuthProvider , getAuth , signInWithPopup  } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { CircularProgress } from "@mui/material";
 
 const Login = () => {
     initFirebase();
     const router = useRouter()
-    const dispatch = useAppDispatch()
-    const [userData, setUserData] = useState({
-        username: '',
-        password: '',
-    });
-    const [remember , setRemember] = useState(false);
-    // useEffect(() => {
-    //     if(localStorage.getItem('logged') === 'true' || sessionStorage.getItem('logged') === 'true') {
-    //         router.push('/')
-    //     }
-    // },[])
-    const execLogIn = async (logData) => {
-        event.preventDefault();
-        const data = {...logData};
-        console.log('data: ', data)
-        console.log('remember: ', remember)
-        try {
-            const rsp = await axios.post(endpoints('user_login'), data);
-            if (rsp.status === 200) {
-                console.log('response backend: ', rsp.data);
-                if (remember) {
-                    localStorage.setItem('logged', 'true')
-                    localStorage.setItem('user', JSON.stringify(rsp.data));
-                } else {
-                    sessionStorage.setItem('logged', 'true');
-                    sessionStorage.setItem('user', JSON.stringify(rsp.data));
-                }
-                dispatch(setSession(true));
-                dispatch(setUser(rsp.data));
-                router.push('/');
-            }
-        } catch(err){
-            if(err.response.status === 401) {
-                Swal.fire({
-                        ...swalWrong,
-                        text: 'Wrong username or password'
-                    })
-
-            }
-        }
-    }
     function Copyright(props) {
         return (
           <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -78,14 +38,15 @@ const Login = () => {
           </Typography>
         );
     }
-
     const provider = new GoogleAuthProvider();
-    
     const auth = getAuth(); // instance of auth method
     const [user, loading] = useAuthState(auth);
-
     if (loading) {
-        return <div>loading</div>
+        return (
+        <div className="flex flex-col items-center justify-center w-full h-full min-h-screen">
+            <CircularProgress/>
+        </div>
+        )
     };
 
     const signIn = async () => { // basic sign in function
@@ -102,10 +63,7 @@ const Login = () => {
                 token: token,
                 user: user
             });
-            localStorage.setItem('logged', 'true');
             router.push('/')
-            
-        
         } catch(error) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -135,7 +93,6 @@ const Login = () => {
             justifyContent:'center'
             }}
         >
-            {/* <CssBaseline /> */}
             <Box
                 sx={{
                     display: 'flex',
@@ -153,42 +110,8 @@ const Login = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <button className="w-full border h-[48px] bg-red-200 font-semibold" onClick={() => signIn()}>Log in firebase</button>
-                <Box component="form" onSubmit={() => execLogIn(userData)} noValidate sx={{ mt: 1 }}>
-                    {/* <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        onChange={(e) => setUserData({ ...userData, username: e.target.value})}
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        onChange={(e) => setUserData({ ...userData, password: e.target.value})}
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="true" color="primary" onChange={(() => setRemember(!remember))}/>}
-                        label="Remember me"
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        Sign In
-                    </Button> */}
+                <button className="w-full border w-[332px] h-[48px] bg-red-200 font-semibold" onClick={() => signIn()}>Log in firebase</button>
+                {/* <Box component="form" onSubmit={() => execLogIn(userData)} noValidate sx={{ mt: 1 }}>
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
@@ -201,7 +124,7 @@ const Login = () => {
                             </Link>
                         </Grid>
                     </Grid>
-                </Box>
+                </Box> */}
             </Box>
             <Copyright sx={{ mt: 8, mb: 4 }} />
         </Container>

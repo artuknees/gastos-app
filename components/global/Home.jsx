@@ -15,6 +15,11 @@ const Home = () => {
     const [categories, setCategories] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [user, loading] = useAuthState(auth);
+    useState(() => {
+        if (user) {
+            console.log('user: ', user)
+        }
+    },[user])
    
     const logOut = () => {
         console.log('out');
@@ -27,22 +32,38 @@ const Home = () => {
         <div className="w-full h-full flex flex-col">
             { user?.displayName.length > 0  ? 
                 <section>
-                    <div>
-                        {`Hola ${user?.displayName}`}
-                    </div>
-                    <button className='mt-10 w-[350px] bg-red-200' onClick={()=> logOut()}>log out</button>
-                    {categories.length > 0 && expenses.length > 0 && 
+                    { user?.email === 'artuknees@gmail.com' ? 
                         <div>
-                            {expenses.map((item, index) => {
-                                return (
-                                    <div key={index} className='flex flex-row w-full justify-evenly'>
-                                        <span>{item.Detalles}</span>
-                                        <span>{categories[categories.findIndex(element => element.id == item.Categoria.Nombre)].Nombre}</span>
-                                    </div>
-                                )
-                            })}
+                            <div>
+                                {`Hola ${user?.displayName}`}
+                            </div>
+                            <button className='mt-10 w-[350px] bg-red-200' onClick={()=> logOut()}>log out</button>
+                            {/* {categories.length > 0 && expenses.length > 0 && 
+                                <div>
+                                    {expenses.map((item, index) => {
+                                        return (
+                                            <div key={index} className='flex flex-row w-full justify-evenly'>
+                                                <span>{item.Detalles}</span>
+                                                <span>{categories[categories.findIndex(element => element.id == item.Categoria.Nombre)].Nombre}</span>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            } */}
+                        </div>
+                    :
+                        <div>
+                            <div>
+                                Hola extranio - no estas autorizado a estar aca
+                            </div>
+                            <button className='mt-10 w-[350px] bg-red-200' onClick={()=> logOut()}>log out</button>
+
                         </div>
                     }
+
+
+
+
                 </section>
             : 
             <div className="flex flex-col items-center justify-center w-full h-full min-h-screen">

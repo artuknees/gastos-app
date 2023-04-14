@@ -58,12 +58,13 @@ const Login = () => {
             // The signed-in user info.
             const user = result.user;
             // IdP data available using getAdditionalUserInfo(result)    
-            console.log({
-                credential: credential,
-                token: token,
-                user: user
-            });
-            router.push('/')
+            // console.log({
+            //     credential: credential,
+            //     token: token,
+            //     user: user
+            // });
+            // comento esto porque esta en auth
+            // router.push('/')
         } catch(error) {
             // Handle Errors here.
             const errorCode = error.code;
@@ -72,12 +73,12 @@ const Login = () => {
             const email = error.customData.email;
             // The AuthCredential type that was used.
             const credential = GoogleAuthProvider.credentialFromError(error);
-            console.log({
-                errorCode: errorCode,
-                errorMessage: errorMessage,
-                email: email,
-                credential: credential
-            })
+            // console.log({
+            //     errorCode: errorCode,
+            //     errorMessage: errorMessage,
+            //     email: email,
+            //     credential: credential
+            // })
         }
     }
 
@@ -110,7 +111,7 @@ const Login = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <button className="w-full border w-[332px] h-[48px] bg-red-200 font-semibold" onClick={() => signIn()}>Log in firebase</button>
+                <button className="w-full border w-[400px] h-[48px] bg-red-200 font-semibold" onClick={() => signIn()}>Log in firebase</button>
                 {/* <Box component="form" onSubmit={() => execLogIn(userData)} noValidate sx={{ mt: 1 }}>
                     <Grid container>
                         <Grid item xs>

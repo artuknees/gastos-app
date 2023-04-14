@@ -1,13 +1,14 @@
 import React,{useEffect,useState} from "react";
 // import { useAppSelector } from "../../redux/hooks";
-// import axios from "axios";
+import axios from "axios";
 // import { useRouter } from "next/router";
-// import { endpoints } from "../../config/endpoints";
+import { endpoints } from "../../config/endpoints";
 import {  getAuth   } from "firebase/auth";
 import { initFirebase } from "../../firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { CircularProgress } from "@mui/material";
-
+import { db } from "../../firebase";
+import { collection , getDocs, query, where } from 'firebase/firestore';
 
 const Home = () => {
     initFirebase();
@@ -16,9 +17,26 @@ const Home = () => {
     const [expenses, setExpenses] = useState([]);
     const [user, loading] = useAuthState(auth);
     useState(() => {
-        if (user) {
-            console.log('user: ', user)
-        }
+        const fetchData = async () => {
+            if (user) {
+                console.log('user: ', user);
+                const uid = user.auth.currentUser.uid;
+                // const rsp = await axios.get(`${endpoints('categories')}`);
+                // const rsp = await axios.get(`${endpoints('categories')}/hola`);
+                // const rsp = await axios.get('http://localhost:3000/api/categories/get/hola');
+                // console.log(rsp)
+                // const res = db.collection('categorias').where("uid", "==", uid).get();
+                // console.log(res)
+
+                const querySnapshot = await getDocs(collection(db, 'categorias')); // get de todo lo de 'producto'
+                const docs = []; // preparo un array
+                querySnapshot.forEach((doc) => { // le pusheo el contenido mas su id.
+                  docs.push({...doc.data(), id:doc.id})
+                })
+                console.log(docs)
+            }
+        };
+        fetchData();
     },[user])
    
     const logOut = () => {
@@ -32,8 +50,6 @@ const Home = () => {
         <div className="w-full h-full flex flex-col">
             { user?.displayName.length > 0  ? 
                 <section>
-                    { user?.email === 'artuknees@gmail.com' ? 
-                        <div>
                             <div>
                                 {`Hola ${user?.displayName}`}
                             </div>
@@ -50,20 +66,6 @@ const Home = () => {
                                     })}
                                 </div>
                             } */}
-                        </div>
-                    :
-                        <div>
-                            <div>
-                                Hola extranio - no estas autorizado a estar aca
-                            </div>
-                            <button className='mt-10 w-[350px] bg-red-200' onClick={()=> logOut()}>log out</button>
-
-                        </div>
-                    }
-
-
-
-
                 </section>
             : 
             <div className="flex flex-col items-center justify-center w-full h-full min-h-screen">

@@ -20,7 +20,7 @@ const Home = () => {
         const fetchData = async () => {
             if (user) {
                 console.log('user: ', user);
-                const uid = user.auth.currentUser.uid;
+                // const uid = user.auth.currentUser.uid;
                 // const rsp = await axios.get(`${endpoints('categories')}`);
                 // const rsp = await axios.get(`${endpoints('categories')}/hola`);
                 // const rsp = await axios.get('http://localhost:3000/api/categories/get/hola');
@@ -28,12 +28,12 @@ const Home = () => {
                 // const res = db.collection('categorias').where("uid", "==", uid).get();
                 // console.log(res)
 
-                const querySnapshot = await getDocs(collection(db, 'categorias')); // get de todo lo de 'producto'
-                const docs = []; // preparo un array
-                querySnapshot.forEach((doc) => { // le pusheo el contenido mas su id.
-                  docs.push({...doc.data(), id:doc.id})
-                })
-                console.log(docs)
+                // const querySnapshot = await getDocs(collection(db, 'categorias')); // get de todo lo de 'producto'
+                // const docs = []; // preparo un array
+                // querySnapshot.forEach((doc) => { // le pusheo el contenido mas su id.
+                //   docs.push({...doc.data(), id:doc.id})
+                // })
+                // console.log(docs)
             }
         };
         fetchData();

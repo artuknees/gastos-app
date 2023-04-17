@@ -6,7 +6,18 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+      'sans': ['Chivo', 'sans-serif'], // overriding 'sans' familiy with 'chivo'(desired) because its called as default in all the text
+    },
+    extend: {
+      colors: {
+        'yellow-main': '#FFDA80',
+        'gray-main': '#F3F3F2',
+        'red-main': '#FF8173',
+        'blue-main': '#5989FF',
+        'black-main': '#170D21',
+      },
+    },
   },
   plugins: [require('@tailwindcss/typography')],
 }

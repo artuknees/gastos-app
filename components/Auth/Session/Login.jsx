@@ -41,11 +41,11 @@ const Login = () => {
                 <h1 className="text-5xl mb-4">Welcome to</h1>
                 <h1 className="text-5xl mb-6 text-red-main">budget app</h1>
                 <div className="flex flex-col items-center mb-6">
-                    <Image src={budget} width={125} height={125}/>
+                    <Image src={budget} width={124} height={124} alt='budget'/>
                 </div>
-                <button className="w-full border h-[45px] bg-red-main rounded-full text-gray-main" onClick={() => signIn()}>Log in with google</button>
+                <button className="w-full border h-[45px] bg-red-main rounded-full text-gray-main" onClick={() => signIn()}>Log in with Google</button>
             </div>
-            <div className="flex-col h-[32px] text-sm bg-black-main text-gray-main w-full text-center leading-[32px] font-semibold">Made with ♥ in Villa Urquiza</div>
+            <div className="flex-col h-[32px] text-sm bg-black-main text-gray-main w-full text-center leading-[32px] font-semibold">Made with ♡ in Villa Urquiza</div>
 
         </div>
     );

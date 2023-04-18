@@ -1,65 +1,26 @@
 import React , {useState} from 'react';
-import { useRouter } from 'next/router';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import CssBaseline from '@mui/material/CssBaseline';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { Button } from '@mui/material';
-import { useAppSelector } from '../../redux/hooks';
+import Image from 'next/image';
 
-const NavBar = () => {
-    const [toggleUser, setToggleUser] = useState(false);
-    const router = useRouter();
-    const { logged } = useAppSelector(state => state.session);
-
+const NavBar = ({modes , mode , setMode}) => {
   return (
-    <>
-        {logged === true &&
-            <>
-                <Box sx={{ flexGrow: 1 }}>
-                <CssBaseline/>
-                <AppBar position="static" >
-                    <Toolbar style={{margin: 0 , paddingRight: 12 , paddingLeft: 12  }}>
-                    <IconButton
-                        size="large"
-                        color="inherit"
-                        aria-label="menu"
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 , textAlign: 'center'}}>
-                        Gastos App
-                    </Typography>
-                    <IconButton color="inherit" onClick={() => setToggleUser(!toggleUser)}>
-                        <AccountCircleIcon/>
-                    </IconButton>
-                    </Toolbar>
-                </AppBar>
-                </Box>
-
-                {toggleUser && 
-                
-                    <Box position='absolute' sx={{
-                        zIndex: 10,
-                        width: '100%',
-                        position:'end',
-                        textAlign:'end',
-                        }}>
-                        <Button onClick={() => router.push('/reset')}>
-                            <LogoutIcon/>
-                            <Typography>Log Out</Typography>
-                        </Button>
-                    </Box>
-                }
-            </>
-        }
-
-    </>
+    <div className="h-[80px] border-t border-t-black-main flex flex-row items-center justify-between cursor-pointer">
+        {modes.map(item => {return (
+            <div 
+            key={item} 
+            className={`w-1/4 h-full rounded rounded-2xl flex flex-col items-center justify-center first:rounded-l-none last:rounded-r-none transition ${mode===item && 'bg-yellow-main'}`} 
+            onClick={() => setMode(item)}>
+                <div className=" mb-1">
+                    <Image 
+                    src={`/${item}.svg`} 
+                    width={24} 
+                    height={24} 
+                    style={{ width: 'auto', height: '100%' }}
+                    alt='icon'/>
+                </div>
+                {item.charAt(0).toUpperCase() + item.slice(1)}
+            </div>
+        )})}
+    </div>
   );
 }
 

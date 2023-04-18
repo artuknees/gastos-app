@@ -9,17 +9,19 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { CircularProgress } from "@mui/material";
 import { db } from "../../firebase";
 import { collection , getDocs, query, where } from 'firebase/firestore';
+import Image from "next/image";
+import NavBar from "./NavBar";
+
 
 const Home = () => {
     initFirebase();
     const auth = getAuth();
-    const [categories, setCategories] = useState([]);
-    const [expenses, setExpenses] = useState([]);
     const [user, loading] = useAuthState(auth);
+    const [mode , setMode] = useState('summary');
+    const modes = ['summary','add','report','profile'];
     useState(() => {
         const fetchData = async () => {
             if (user) {
-                console.log('user: ', user);
                 // const uid = user.auth.currentUser.uid;
                 // const rsp = await axios.get(`${endpoints('categories')}`);
                 // const rsp = await axios.get(`${endpoints('categories')}/hola`);
@@ -47,30 +49,14 @@ const Home = () => {
     };
 
     return(
-        <div className="w-full h-full flex flex-col">
-            { user?.displayName.length > 0  ? 
-                <section>
-                            <div>
-                                {`Hola ${user?.displayName}`}
-                            </div>
-                            <button className='mt-10 w-[350px] bg-red-200' onClick={()=> logOut()}>log out</button>
-                            {/* {categories.length > 0 && expenses.length > 0 && 
-                                <div>
-                                    {expenses.map((item, index) => {
-                                        return (
-                                            <div key={index} className='flex flex-row w-full justify-evenly'>
-                                                <span>{item.Detalles}</span>
-                                                <span>{categories[categories.findIndex(element => element.id == item.Categoria.Nombre)].Nombre}</span>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            } */}
-                </section>
-            : 
-            <div className="flex flex-col items-center justify-center w-full h-full min-h-screen">
-                <CircularProgress/>
-            </div>}
+        <div className="w-full h-screen flex flex-col">
+            <div className="flex-auto h-full">
+                <div className="h-[80px] bg-red-main rounded-b rounded-b-[20px] text-3xl flex flex-col items-center justify-center font-bold text-gray-main">{mode.charAt(0).toUpperCase() + mode.slice(1)}</div>
+                <div className="w-full px-4">
+                    {mode === 'profile' && <button className='mt-10 h-[45px] w-full bg-red-main rounded-full text-gray-main' onClick={()=> logOut()}>Log out</button> }
+                </div>
+            </div>
+            <NavBar mode={mode} modes={modes} setMode={setMode}/>
         </div>
     )
 };

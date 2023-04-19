@@ -1,14 +1,14 @@
-import { db } from "../../../../firebase";
-import { collection , getDocs } from 'firebase/firestore';
-import { initFirebase } from "../../../../firebase";
-import { getAuth } from "firebase/auth";
-import { useAuthState } from 'react-firebase-hooks/auth';
+// import { db } from "../../../../firebase";
+// import { collection , getDocs } from 'firebase/firestore';
+// import { initFirebase } from "../../../../firebase";
+// import { getAuth } from "firebase/auth";
+// import { useAuthState } from 'react-firebase-hooks/auth';
 
 const getCategories = async (req, res) => {
-  console.log('entro')
-  initFirebase();
-  const auth = getAuth(); // instance of auth method
-  const [user, loading] = useAuthState(auth);
+  // console.log('entro')
+  // initFirebase();
+  // const auth = getAuth(); // instance of auth method
+  // const [user, loading] = useAuthState(auth);
   //   if (user) {
   //     const querySnapshot = await getDocs(collection(db, 'categorias')); // get de todo lo de 'producto'
   //     const docs = []; // preparo un array

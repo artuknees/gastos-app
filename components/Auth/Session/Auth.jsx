@@ -29,7 +29,7 @@ const Auth = ({ children }) => { // this is the global component inside Provider
         else {
             router.push('/auth/login')
         }
-    },[user , router.pathname , auth , router])
+    },[user , router.pathname])
 
     return (
         <>{children}</>

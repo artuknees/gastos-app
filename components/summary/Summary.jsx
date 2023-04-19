@@ -6,7 +6,7 @@ import { getFirestore } from "firebase/firestore";
 import { collection , getDocs, query, where } from 'firebase/firestore';
 import { CircularProgress } from "@mui/material";
 
-const Summary = () => {
+const Summary = ({}) => {
     const app = initFirebase();
     const auth = getAuth();
     const [user, loading] = useAuthState(auth);
@@ -42,23 +42,23 @@ const Summary = () => {
         };
         setIsLoading(true)
         fetchData();
-    },[user , app])
+    },[user])
 
     return (
         <>
             { !isLoading && categories.length > 0 && expenses.length > 0 ? 
                 <div className="w-full h-full flex flex-col pt-4">
-                    <h1 className="text-2xl">Last expenses</h1>
+                    <h1 className="text-2xl font-semibold">Last expenses</h1>
                     <div className="mt-5">
                         { expenses.map(item => {return (
                             <div 
                             key={item.id}
-                            className="w-full h-[102px] bg-yellow-main border border-red-main rounded-xl mb-4 flex flex-row"
+                            className="w-full h-[102px] bg-yellow-main border border-black-main rounded-xl mb-4 flex flex-row shadow-xl"
                             >
                                 <section className="w-1/3 flex flex-col items-center justify-evenly">
-                                    <span>{enhanceText(categories[categories.findIndex(cat => cat.id === item.categoria)].nombre)}</span>
+                                    <span className="font-bold">{enhanceText(categories[categories.findIndex(cat => cat.id === item.categoria)].nombre)}</span>
                                     <span>{`$${item.valor}`}</span>
-                                    <span>{new Date(item.fecha.seconds).toLocaleDateString()}</span>
+                                    <span>{new Date(item.fecha).toLocaleDateString()}</span>
                                 </section>
                                 <div className="w-1/3 flex flex-col items-center justify-center">{enhanceText(item.comentario)}</div>
                                 <div className="w-1/3 flex flex-col items-center justify-center">N/A</div>

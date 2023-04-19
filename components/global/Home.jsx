@@ -25,10 +25,10 @@ const Home = () => {
    
     return(
         <div className="w-full h-screen flex flex-col">
-            <div className="flex-none flex flex-col items-center justify-center h-[80px] bg-red-main rounded-b rounded-b-[20px]">
+            <div className="flex-none flex flex-col items-center justify-center h-[80px] bg-red-main rounded-b rounded-b-[20px] shadow-xl">
                 <h1 className="text-3xl font-bold text-gray-main">{mode.charAt(0).toUpperCase() + mode.slice(1)}</h1>
             </div>
-            <div className="flex-auto h-full flex flex-col overflow-y-auto sm:scrollbar">
+            <div className="flex-auto h-full flex flex-col overflow-y-auto sm:scrollbar shadow-lg">
                 <div className="px-5 h-full w-full">
                     {mode === 'summary' && <Summary/>}
                     {mode === 'add' && <Add/>}

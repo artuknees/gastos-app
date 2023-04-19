@@ -15,7 +15,7 @@ const Profile = () => {
 
 
     return (
-        <button className='mt-10 h-[45px] w-full bg-red-main rounded-full text-gray-main' onClick={()=> logOut()}>Log out</button>
+        <button className='mt-10 h-[45px] w-full bg-red-main rounded-full text-gray-main shadow-lg' onClick={()=> logOut()}>Log out</button>
     )
 };
 

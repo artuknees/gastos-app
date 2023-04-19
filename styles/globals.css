@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* Define scrollbar properties */
 @layer utilities {
     .scrollbar::-webkit-scrollbar {

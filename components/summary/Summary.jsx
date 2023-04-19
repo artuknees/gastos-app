@@ -42,7 +42,7 @@ const Summary = () => {
         };
         setIsLoading(true)
         fetchData();
-    },[user])
+    },[user , app])
 
     return (
         <>

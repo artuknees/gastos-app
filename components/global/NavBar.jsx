@@ -9,7 +9,7 @@ const NavBar = ({modes , mode , setMode}) => {
             key={item} 
             className={`w-1/4 h-full rounded rounded-2xl flex flex-col items-center justify-center first:rounded-l-none last:rounded-r-none transition ${mode===item && 'bg-yellow-main'}`} 
             onClick={() => setMode(item)}>
-                <div className=" mb-1">
+                <div className='mb-1'>
                     <Image 
                     src={`/${item}.svg`} 
                     width={24} 

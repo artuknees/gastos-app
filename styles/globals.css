@@ -5,22 +5,22 @@
 /* Define scrollbar properties */
 @layer utilities {
     .scrollbar::-webkit-scrollbar {
-      width: 20px;
-      height: 20px;
+      width: 10px;
+      /* height: 1px; */
     }
   
     .scrollbar::-webkit-scrollbar-track {
       border-radius: 100vh;
-      background: #f7f4ed;
+      background: #F3F3F2;
     }
   
     .scrollbar::-webkit-scrollbar-thumb {
-      background: #e0cbcb;
+      background: #FF8173;
       border-radius: 100vh;
-      border: 3px solid #f6f7ed;
+      border: 2px solid #F3F3F2;
     }
   
     .scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #c0a0b9;
+      background: #FF8173;
     }
   }

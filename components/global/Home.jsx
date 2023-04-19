@@ -13,6 +13,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import NavBar from "./NavBar";
 import Profile from "../profile/Profile";
 import Summary from "../summary/Summary";
+import Add from "../add/Add";
 
 
 const Home = () => {
@@ -30,6 +31,7 @@ const Home = () => {
             <div className="flex-auto h-full flex flex-col overflow-y-auto sm:scrollbar">
                 <div className="px-5 h-full w-full">
                     {mode === 'summary' && <Summary/>}
+                    {mode === 'add' && <Add/>}
                     {mode === 'profile' && <Profile/> }
                 </div>
             </div>

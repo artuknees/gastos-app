@@ -6,7 +6,7 @@ import { getFirestore } from "firebase/firestore";
 import { collection , getDocs, query, where } from 'firebase/firestore';
 import { CircularProgress } from "@mui/material";
 
-const Summary = () => {
+const Summary = ({}) => {
     const app = initFirebase();
     const auth = getAuth();
     const [user, loading] = useAuthState(auth);
@@ -42,7 +42,7 @@ const Summary = () => {
         };
         setIsLoading(true)
         fetchData();
-    },[user , app])
+    },[user])
 
     return (
         <>

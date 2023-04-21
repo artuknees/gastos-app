@@ -73,12 +73,12 @@ const Add = ({}) => {
         <>
             { !isLoading && categories.length > 0 ? 
                 <form className="w-full h-full flex flex-col pt-4" onSubmit={() => handleSubmit()}>
-                    <div className="w-full flex flex-col mb-5">
+                    <div className="min-w-full flex flex-col mb-5 w-full">
                         <label className="font-semibold text-lg">Fecha</label>
                         <input
                             type='date'
                             onChange={(e) => setDataPack({...dataPack, fecha:(((Date.parse(e.target.value)))+(60*60*3*1000))})}
-                            className={`bg-transparent border h-[45px] rounded-full px-4 mt-2 shadow-lg ${dataPack.fecha === 0 ? 'border-black-main' : 'border-red-main'}`}
+                            className={`min-w-full w-full bg-transparent border h-[45px] rounded-full px-4 mt-2 shadow-lg ${dataPack.fecha === 0 ? 'border-black-main' : 'border-red-main'}`}
                         />
                     </div>
                     <div className="w-full flex flex-col mb-5">

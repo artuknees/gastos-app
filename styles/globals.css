@@ -6,7 +6,7 @@
 /* Define scrollbar properties */
 @layer utilities {
     .scrollbar::-webkit-scrollbar {
-      width: 10px;
+      width: 8px;
       /* height: 1px; */
     }
   

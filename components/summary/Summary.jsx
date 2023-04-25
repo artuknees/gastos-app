@@ -5,6 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { getFirestore } from "firebase/firestore";
 import { collection , getDocs, query, where } from 'firebase/firestore';
 import { CircularProgress } from "@mui/material";
+import List from './List';
 
 const Summary = ({}) => {
     const app = initFirebase();
@@ -13,9 +14,6 @@ const Summary = ({}) => {
     const [isLoading , setIsLoading] = useState(true);
     const [categories , setCategories] = useState([]);
     const [expenses , setExpenses] = useState([]);
-    const enhanceText = (str) => {
-        return (str.charAt(0).toUpperCase() + str.slice(1))
-    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,26 +44,8 @@ const Summary = ({}) => {
 
     return (
         <>
-            { !isLoading && categories.length > 0 && expenses.length > 0 ? 
-                <div className="w-full h-full flex flex-col pt-4">
-                    <h1 className="text-2xl font-semibold">Last expenses</h1>
-                    <div className="mt-5">
-                        { expenses.map(item => {return (
-                            <div 
-                            key={item.id}
-                            className="w-full h-[102px] bg-yellow-main border border-black-main rounded-xl mb-4 flex flex-row shadow-xl"
-                            >
-                                <section className="w-1/3 flex flex-col items-center justify-evenly">
-                                    <span className="font-bold">{enhanceText(categories[categories.findIndex(cat => cat.id === item.categoria)].nombre)}</span>
-                                    <span>{`$${item.valor}`}</span>
-                                    <span>{new Date(item.fecha).toLocaleDateString()}</span>
-                                </section>
-                                <div className="w-1/3 flex flex-col items-center justify-center">{enhanceText(item.comentario)}</div>
-                                <div className="w-1/3 flex flex-col items-center justify-center">N/A</div>
-                            </div>
-                        )}) }
-                    </div>
-                </div>
+            { !isLoading && categories.length > 0 && expenses.length > 0 ?
+                <List categories={categories} expenses={expenses}/>
             : 
                 <div className="w-full h-full flex flex-col items-center justify-center">
                     <CircularProgress style={{'color': "#FF8173"}} size={60}/> 

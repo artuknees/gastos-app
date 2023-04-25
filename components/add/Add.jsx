@@ -12,12 +12,11 @@ const Add = ({}) => {
     const app = initFirebase();
     const auth = getAuth();
     const db = getFirestore(app)
-
     const [user, loading] = useAuthState(auth);
     const [isLoading , setIsLoading] = useState(true);
     const [categories , setCategories] = useState([]);
     const [dataPack , setDataPack] = useState({
-        fecha: 0,
+        fecha: Date.now(),
         categoria: '',
         comentario: '',
         valor: 0
@@ -46,7 +45,7 @@ const Add = ({}) => {
         event.preventDefault();
         console.log(dataPack);
         try {
-            // await addDoc(collection(db, 'gastos'),{...dataPack})
+            await addDoc(collection(db, 'gastos'),{...dataPack})
             Swal.fire({ // alert the user
                 icon:'success',
                 title:'Enviado!',
@@ -54,7 +53,7 @@ const Add = ({}) => {
                 confirmButtonColor:'#5989FF'
             });
             setDataPack({ // reset object
-                fecha: 0,
+                fecha: Date.now(),
                 categoria: '',
                 comentario: '',
                 valor: 0
@@ -76,9 +75,8 @@ const Add = ({}) => {
                     <div className="min-w-full flex flex-col mb-5 w-full">
                         <label className="font-semibold text-lg">Fecha</label>
                         <input
-                            // value={}
-                            placeholder="dd/mm/aaaa"
                             type='date'
+                            value={new Date(dataPack.fecha).toISOString().slice(0, 10)}
                             onChange={(e) => setDataPack({...dataPack, fecha:(((Date.parse(e.target.value)))+(60*60*3*1000))})}
                             className={`min-w-full w-full outline-none bg-transparent appearance-none border h-[45px] rounded-full px-4 mt-2 shadow-lg ${dataPack.fecha === 0 ? 'border-black-main' : 'border-red-main'}`}
                         />
@@ -99,7 +97,7 @@ const Add = ({}) => {
                     <div className="w-full flex flex-col mb-5">
                         <label className="font-semibold text-lg">Monto</label>
                         <input
-                        value={dataPack.valor === 0 ? '': dataPack.valor}
+                        value={dataPack.valor === 0 ? '': `${dataPack.valor}`}
                         type='number'
                         placeholder="$1450"
                         onChange={(e) => {
@@ -109,7 +107,7 @@ const Add = ({}) => {
                                 setDataPack({...dataPack, valor: 0})
                             }
                         }}
-                        className={`bg-transparent border outline-none h-[45px] rounded-full px-4 mt-2 shadow-lg ${dataPack.valor === 0 ? 'border-black-main' : 'border-red-main'}`}
+                        className={` bg-transparent border outline-none h-[45px] rounded-full px-4 mt-2 shadow-lg ${dataPack.valor === 0 ? 'border-black-main' : 'border-red-main'}`}
                         />
                     </div>
                     <div className="w-full flex flex-col mb-5">

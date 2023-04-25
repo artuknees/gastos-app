@@ -2,7 +2,14 @@ import React from "react";
 import { enhanceText } from "../utils/enhanceText";
 import Image from "next/image";
 
-const List = ({expenses , categories}) => {
+const List = ({expenses , categories , selectedExpense , setSelectedExpense}) => {
+    const handleExpenseSelection = (item) => {
+        if (selectedExpense === item) {
+            setSelectedExpense('')
+        } else {
+            setSelectedExpense(item)
+        }
+    };
     return (
         <div className="w-full h-full flex flex-col pt-4">
             <h1 className="text-2xl font-semibold">Last expenses</h1>
@@ -10,10 +17,11 @@ const List = ({expenses , categories}) => {
                 { expenses.sort((a,b) => {return (b.fecha - a.fecha)}).map(item => {return (
                     <div 
                     key={item.id}
-                    className="w-full h-[102px] bg-yellow-main border border-black-main rounded-xl mb-4 flex flex-row shadow-xl"
+                    className={`w-full h-[102px] border border-black-main rounded-xl mb-4 flex flex-row shadow-xl ${selectedExpense === item.id ? 'bg-blue-main' : 'bg-yellow-main'}`}
+                    onClick={() => handleExpenseSelection(item.id)}
                     >
                         <div className="w-1/4 h-full flex flex-col items-center justify-center">
-                            <div className="flex flex-col h-[52px] w-[52px] p-1 bg-gray-main shadow-lg border border-black-main rounded rounded-lg">
+                            <div className={`flex flex-col h-[52px] w-[52px] p-1 bg-gray-main shadow-lg border border-black-main rounded rounded-lg`}>
                             <Image 
                                 alt='app image'
                                 src={`/${categories[categories.findIndex(cat => cat.id === item.categoria)].nombre}.svg`}

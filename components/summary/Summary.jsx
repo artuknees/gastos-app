@@ -3,8 +3,9 @@ import { initFirebase } from "../../firebase";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getFirestore } from "firebase/firestore";
-import { collection , getDocs, query, where } from 'firebase/firestore';
+import { collection , getDocs, doc , deleteDoc , query, where } from 'firebase/firestore';
 import { CircularProgress } from "@mui/material";
+import List from './List';
 
 const Summary = ({}) => {
     const app = initFirebase();
@@ -13,9 +14,10 @@ const Summary = ({}) => {
     const [isLoading , setIsLoading] = useState(true);
     const [categories , setCategories] = useState([]);
     const [expenses , setExpenses] = useState([]);
-    const enhanceText = (str) => {
-        return (str.charAt(0).toUpperCase() + str.slice(1))
-    }
+    const [selectedExpense , setSelectedExpense] = useState('');
+    const [refreshFlag , setRefreshFlag] = useState(true);
+    const [displayExpense , setDisplayExpense] = useState([]);
+    const [amountOfDisplay, setAmountOfDisplay] = useState(10);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,35 +38,35 @@ const Summary = ({}) => {
                 setCategories(cats);
                 setExpenses(exps);
                 setIsLoading(false)
+                setDisplayExpense(exps.sort((a,b) => {return (b.fecha - a.fecha)}).slice(0,amountOfDisplay))
             } else {
                 setIsLoading(false)
             }
         };
         setIsLoading(true)
         fetchData();
-    },[user])
+    },[user, refreshFlag, amountOfDisplay]);
+    const handleDeleteExpense = async(item) => {
+        const db = getFirestore(app)
+        try {
+            await deleteDoc(doc(db, 'gastos', item));
+            setRefreshFlag(!refreshFlag)
+        } catch(error) {
+            console.error(error)
+        }
+    };
 
     return (
         <>
-            { !isLoading && categories.length > 0 && expenses.length > 0 ? 
-                <div className="w-full h-full flex flex-col pt-4">
-                    <h1 className="text-2xl font-semibold">Last expenses</h1>
-                    <div className="mt-5">
-                        { expenses.map(item => {return (
-                            <div 
-                            key={item.id}
-                            className="w-full h-[102px] bg-yellow-main border border-black-main rounded-xl mb-4 flex flex-row shadow-xl"
-                            >
-                                <section className="w-1/3 flex flex-col items-center justify-evenly">
-                                    <span className="font-bold">{enhanceText(categories[categories.findIndex(cat => cat.id === item.categoria)].nombre)}</span>
-                                    <span>{`$${item.valor}`}</span>
-                                    <span>{new Date(item.fecha).toLocaleDateString()}</span>
-                                </section>
-                                <div className="w-1/3 flex flex-col items-center justify-center">{enhanceText(item.comentario)}</div>
-                                <div className="w-1/3 flex flex-col items-center justify-center">N/A</div>
-                            </div>
-                        )}) }
-                    </div>
+            { !isLoading && categories.length > 0 && expenses.length > 0 ?
+                <div className="flex flex-col w-full pb-5">
+                    <List categories={categories} expenses={displayExpense} selectedExpense={selectedExpense} setSelectedExpense={setSelectedExpense}/>
+                    {expenses.length > amountOfDisplay && 
+                        <div className="flex flex-col items-end justify-center text-black-main underline cursor-pointer" onClick={() => setAmountOfDisplay(amountOfDisplay + 10)}>
+                            Show more...
+                        </div>
+                    }
+                    {selectedExpense !== '' && <button className='mt-10 h-[45px] w-full bg-red-main rounded-full text-gray-main shadow-lg' onClick={()=> handleDeleteExpense(selectedExpense)}>Delete expense</button>}
                 </div>
             : 
                 <div className="w-full h-full flex flex-col items-center justify-center">

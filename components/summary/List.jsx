@@ -24,7 +24,7 @@ const List = ({expenses , categories , selectedExpense , setSelectedExpense}) =>
                             <div className={`flex flex-col h-[52px] w-[52px] p-1 bg-gray-main shadow-lg border border-black-main rounded rounded-lg`}>
                             <Image 
                                 alt='app image'
-                                src={`/${categories[categories.findIndex(cat => cat.id === item.categoria)].nombre}.svg`}
+                                src={`/${(categories[categories.findIndex(cat => cat.id === item.categoria)].nombre).toLowerCase().split(' ').join('_')}.svg`}
                                 height={30}
                                 width={30}
                                 style={{ width: 'auto', height: 'auto' }}

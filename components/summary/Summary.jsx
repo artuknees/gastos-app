@@ -16,6 +16,8 @@ const Summary = ({}) => {
     const [expenses , setExpenses] = useState([]);
     const [selectedExpense , setSelectedExpense] = useState('');
     const [refreshFlag , setRefreshFlag] = useState(true);
+    const [displayExpense , setDisplayExpense] = useState([]);
+    const [amountOfDisplay, setAmountOfDisplay] = useState(10);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,13 +38,14 @@ const Summary = ({}) => {
                 setCategories(cats);
                 setExpenses(exps);
                 setIsLoading(false)
+                setDisplayExpense(exps.sort((a,b) => {return (b.fecha - a.fecha)}).slice(0,amountOfDisplay))
             } else {
                 setIsLoading(false)
             }
         };
         setIsLoading(true)
         fetchData();
-    },[user, refreshFlag]);
+    },[user, refreshFlag, amountOfDisplay]);
     const handleDeleteExpense = async(item) => {
         const db = getFirestore(app)
         try {
@@ -57,7 +60,12 @@ const Summary = ({}) => {
         <>
             { !isLoading && categories.length > 0 && expenses.length > 0 ?
                 <div className="flex flex-col w-full pb-5">
-                    <List categories={categories} expenses={expenses} selectedExpense={selectedExpense} setSelectedExpense={setSelectedExpense}/>
+                    <List categories={categories} expenses={displayExpense} selectedExpense={selectedExpense} setSelectedExpense={setSelectedExpense}/>
+                    {expenses.length > amountOfDisplay && 
+                        <div className="flex flex-col items-end justify-center text-black-main underline cursor-pointer" onClick={() => setAmountOfDisplay(amountOfDisplay + 10)}>
+                            Show more...
+                        </div>
+                    }
                     {selectedExpense !== '' && <button className='mt-10 h-[45px] w-full bg-red-main rounded-full text-gray-main shadow-lg' onClick={()=> handleDeleteExpense(selectedExpense)}>Delete expense</button>}
                 </div>
             : 

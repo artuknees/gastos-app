@@ -43,7 +43,6 @@ const Add = ({}) => {
     },[user]);
     const handleSubmit = async () => { // function for form sending
         event.preventDefault();
-        console.log(dataPack);
         try {
             await addDoc(collection(db, 'gastos'),{...dataPack})
             Swal.fire({ // alert the user
@@ -59,7 +58,6 @@ const Add = ({}) => {
                 valor: 0
             })
         } catch (err) {
-            console.error(err)
             Swal.fire({
                 icon:'error',
                 title:'Error',

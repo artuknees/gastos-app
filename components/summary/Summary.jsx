@@ -36,6 +36,14 @@ const Summary = ({}) => {
                 expensesGet.forEach((doc) => { // le pusheo el contenido mas su id.
                     exps.push({...doc.data(), id:doc.id})
                 })
+                // get de goal
+                const goalGet = await getDocs(collection(db, 'objetivo')); // get de todo lo de 'producto'
+                const goal = []; // preparo un array
+                goalGet.forEach((doc) => { // le pusheo el contenido mas su id.
+                    goal.push({...doc.data(), id:doc.id})
+                })
+                console.log(goal[0])
+                
                 setCategories(cats);
                 setExpenses(exps);
                 setIsLoading(false)

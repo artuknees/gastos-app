@@ -6,6 +6,7 @@ import { getFirestore } from "firebase/firestore";
 import { collection , getDocs, doc , deleteDoc , query, where } from 'firebase/firestore';
 import { CircularProgress } from "@mui/material";
 import List from './List';
+import GoalAnalysis from "./GoalAnalysis";
 
 const Summary = ({}) => {
     const app = initFirebase();
@@ -60,6 +61,7 @@ const Summary = ({}) => {
         <>
             { !isLoading && categories.length > 0 && expenses.length > 0 ?
                 <div className="flex flex-col w-full pb-5">
+                    <GoalAnalysis expenses={expenses}/>
                     <List categories={categories} expenses={displayExpense} selectedExpense={selectedExpense} setSelectedExpense={setSelectedExpense}/>
                     {expenses.length > amountOfDisplay && 
                         <div className="flex flex-col items-end justify-center text-black-main underline cursor-pointer" onClick={() => setAmountOfDisplay(amountOfDisplay + 10)}>

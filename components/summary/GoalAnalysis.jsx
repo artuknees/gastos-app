@@ -1,5 +1,7 @@
-import { CircularProgress, LinearProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import { styled } from '@mui/material/styles';
 
 const GoalAnalysis = ({expenses}) => {
     const [monthlyTotal , setMonthlyTotal] = useState(0);
@@ -22,7 +24,20 @@ const GoalAnalysis = ({expenses}) => {
             setMonthlyTotal(monthTotal);
             setTotalSpent(parseInt((monthTotal/limit)*100))
         })
-    },[expenses])
+    },[expenses]);
+
+    const BorderLinearProgress = styled(LinearProgress)(() => ({
+        height: 24,
+        borderRadius: 12,
+        [`&.${linearProgressClasses.colorPrimary}`]: {
+          backgroundColor: "#F3F3F2",
+        },
+        [`& .${linearProgressClasses.bar}`]: {
+          borderRadius: 12,
+          backgroundColor: "#5989FF",
+        },
+    }));
+
     return (
         <>
         {monthlyTotal > 0 && month !== '' ?
@@ -34,14 +49,7 @@ const GoalAnalysis = ({expenses}) => {
                 
 
                 <div className="flex flex-col w-full h-[24px] bg-gray-main rounded-full p-0.5 border border-black-main">
-                    {/* <div className={`h-full bg-blue-main rounded-full w-[90%]`}></div> */}
-                    {/* <div className={`h-full bg-blue-main rounded-full w-[95%]`}>{totalSpent}</div> */}
-                    {/* <div className={`h-full bg-blue-main rounded-full ${totalSpent.length > 0 ? `w-[${totalSpent}%]` : 'w-[0%]' }`}>{totalSpent.length > 0 ? totalSpent : 0}</div> */}
-                    {/* <LinearProgress  /> */}
-                    <LinearProgress variant="determinate" value={totalSpent} sx={{
-                        height: '24px',
-                        borderRadius: '12px'
-                    }}  />
+                    <BorderLinearProgress variant="determinate" value={totalSpent} />
                 </div>
                 <div className="flex flex-row justify-end">
                     <span className="h-full text-sm">{`Limit: $${limit}`}</span>

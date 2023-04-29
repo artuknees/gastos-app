@@ -1,13 +1,12 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, LinearProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 const GoalAnalysis = ({expenses}) => {
     const [monthlyTotal , setMonthlyTotal] = useState(0);
-    const [totalSpent , setTotalSpent] = useState('');
+    const [totalSpent , setTotalSpent] = useState(0);
     const [month , setMonth] = useState('')
     const limit = 350000;
     const months = ['January','February','March','April','May','June','July','August','September','October','November','December']
-    console.log(totalSpent)
     useEffect(()=>{
         const now = new Date(Date.now());
         const thisMonth = now.getMonth();
@@ -21,20 +20,28 @@ const GoalAnalysis = ({expenses}) => {
                 monthTotal += item.valor
             }
             setMonthlyTotal(monthTotal);
-            setTotalSpent(`w-[${parseInt((monthTotal/limit)*100)}%]`)
+            setTotalSpent(parseInt((monthTotal/limit)*100))
         })
     },[expenses])
     return (
         <>
-        {monthlyTotal > 0 && month !== '' && totalSpent !== '' ?
+        {monthlyTotal > 0 && month !== '' ?
             <div className="mt-6 w-full h-[120px] border border-black-main rounded-2xl bg-yellow-main shadow-xl p-4 flex flex-col justify-between">
                 <div className="flex flex-row justify-between">
                     <h1 className="font-semibold text-xl">{months[month]}</h1>
                     <h1 className="text-lg">{`Total: $${monthlyTotal}`}</h1>
                 </div>
+                
+
                 <div className="flex flex-col w-full h-[24px] bg-gray-main rounded-full p-0.5 border border-black-main">
                     {/* <div className={`h-full bg-blue-main rounded-full w-[90%]`}></div> */}
-                    <div className={`h-full bg-blue-main rounded-full ${totalSpent !== '' && totalSpent}`}></div>
+                    {/* <div className={`h-full bg-blue-main rounded-full w-[95%]`}>{totalSpent}</div> */}
+                    {/* <div className={`h-full bg-blue-main rounded-full ${totalSpent.length > 0 ? `w-[${totalSpent}%]` : 'w-[0%]' }`}>{totalSpent.length > 0 ? totalSpent : 0}</div> */}
+                    {/* <LinearProgress  /> */}
+                    <LinearProgress variant="determinate" value={totalSpent} sx={{
+                        height: '24px',
+                        borderRadius: '12px'
+                    }}  />
                 </div>
                 <div className="flex flex-row justify-end">
                     <span className="h-full text-sm">{`Limit: $${limit}`}</span>

@@ -8,6 +8,7 @@ import { CircularProgress } from "@mui/material";
 import List from './List';
 import GoalAnalysis from "./GoalAnalysis";
 import Swal from "sweetalert2";
+import DistributionChart from "./DistributionChart";
 
 const Summary = ({}) => {
     const app = initFirebase();
@@ -70,11 +71,12 @@ const Summary = ({}) => {
     return (
         <>
             { !isLoading && categories.length > 0 && expenses.length > 0 ?
-                <div className="flex flex-col w-full pb-5">
+                <div className="flex flex-col w-full pb-5 items-center">
                     <GoalAnalysis expenses={expenses}/>
+                    <DistributionChart expenses={expenses} categories={categories}/>
                     <List categories={categories} expenses={displayExpense} selectedExpense={selectedExpense} setSelectedExpense={setSelectedExpense}/>
                     {expenses.length > amountOfDisplay && 
-                        <div className="flex flex-col items-end justify-center text-black-main underline cursor-pointer" onClick={() => setAmountOfDisplay(amountOfDisplay + 10)}>
+                        <div className="flex flex-col w-full items-end justify-center text-black-main underline cursor-pointer" onClick={() => setAmountOfDisplay(amountOfDisplay + 10)}>
                             Show more...
                         </div>
                     }

@@ -35,7 +35,7 @@ const Home = () => {
                     {mode === 'profile' && <Profile/> }
                 </div>
             </div>
-            <NavBar mode={mode} modes={modes} setMode={setMode}/>
+            <NavBar mode={mode} setMode={setMode}/>
         </div>
     )
 };

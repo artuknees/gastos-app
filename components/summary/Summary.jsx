@@ -7,6 +7,7 @@ import { collection , getDocs, doc , deleteDoc , query, where } from 'firebase/f
 import { CircularProgress } from "@mui/material";
 import List from './List';
 import GoalAnalysis from "./GoalAnalysis";
+import Swal from "sweetalert2";
 
 const Summary = ({}) => {
     const app = initFirebase();
@@ -36,6 +37,12 @@ const Summary = ({}) => {
                 expensesGet.forEach((doc) => { // le pusheo el contenido mas su id.
                     exps.push({...doc.data(), id:doc.id})
                 })
+                // get de goal
+                const goalGet = await getDocs(collection(db, 'objetivo')); // get de todo lo de 'producto'
+                const goal = []; // preparo un array
+                goalGet.forEach((doc) => { // le pusheo el contenido mas su id.
+                    goal.push({...doc.data(), id:doc.id})
+                })               
                 setCategories(cats);
                 setExpenses(exps);
                 setIsLoading(false)
@@ -53,7 +60,10 @@ const Summary = ({}) => {
             await deleteDoc(doc(db, 'gastos', item));
             setRefreshFlag(!refreshFlag)
         } catch(error) {
-            console.error(error)
+            Swal.fire({
+                icon:'error',
+                title: 'Error deleting'
+            })
         }
     };
 

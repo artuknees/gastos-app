@@ -7,10 +7,8 @@ const Profile = () => {
     initFirebase();
     const auth = getAuth();
     const logOut = () => {
-        console.log('out');
         auth.signOut();
         localStorage.setItem('logged', 'false');
-        console.log('signed out')
     };
 
 

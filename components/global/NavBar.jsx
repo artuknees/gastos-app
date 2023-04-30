@@ -1,26 +1,49 @@
 import React from 'react';
-import Image from 'next/image';
+import Paper from '@mui/material/Paper';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
-const NavBar = ({modes , mode , setMode}) => {
+const NavBar = ({ mode , setMode}) => {
+  const handleChange = (event, newValue) => {
+    setMode(newValue);
+  };
   return (
-    <div className="h-[92px] flex flex-row items-center justify-between cursor-pointer">
-        {modes.map(item => {return (
-            <div 
-              key={item} 
-              className={`w-1/4 h-full rounded rounded-2xl flex flex-col items-center justify-center first:rounded-l-none last:rounded-r-none transition ${mode===item && 'bg-yellow-main'}`} 
-              onClick={() => setMode(item)}>
-                <div className=''>
-                    <Image 
-                    src={`/${item}.svg`} 
-                    width={24} 
-                    height={24} 
-                    style={{ width: 'auto', height: '100%' }}
-                    alt='icon'/>
-                </div>
-                <div className='h-[16px]'>{item.charAt(0).toUpperCase() + item.slice(1)}</div>
-            </div>
-        )})}
-    </div>
+    <Paper elevation={16} sx={{width:"100%" , height:"92px" }}>
+      <BottomNavigation 
+        sx={{ 
+          width: "100%",
+          height:"100%",
+          backgroundColor:'#F3F3F2'
+        }} 
+        value={mode} 
+        onChange={handleChange}
+      >
+        <BottomNavigationAction
+          label="Summary"
+          value="summary"
+          icon={<SummarizeIcon fontSize='large' />}
+        />
+        <BottomNavigationAction
+          label="Add"
+          value="add"
+          icon={<AddCircleOutlineIcon fontSize='large' />}
+        />
+        <BottomNavigationAction
+          label="Report"
+          value="report"
+          icon={<LeaderboardIcon fontSize='large' />}
+        />
+        <BottomNavigationAction 
+          label="Profile" 
+          value="profile" 
+          icon={<AccountBoxIcon fontSize='large' />} 
+        />
+      </BottomNavigation>
+    </Paper>
   );
 }
 

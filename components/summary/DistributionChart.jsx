@@ -69,7 +69,7 @@ const DistributionChart = ({expenses , categories}) => {
 
 
     return (
-        <div className="flex flex-col sm:w-[50%] w-full bg-gray-main relative mt-8">
+        <div className="flex flex-col w-full lg:w-1/3 bg-gray-main relative mt-8">
             { donnutData?.datasets && chartOptions?.plugins && 
             <>
                 <Doughnut data={donnutData} options={chartOptions} />

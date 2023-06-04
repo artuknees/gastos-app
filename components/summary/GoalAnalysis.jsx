@@ -3,11 +3,10 @@ import React, { useEffect, useState } from "react";
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
 
-const GoalAnalysis = ({expenses}) => {
+const GoalAnalysis = ({expenses , limit}) => {
     const [monthlyTotal , setMonthlyTotal] = useState(0);
     const [totalSpent , setTotalSpent] = useState(0);
-    const [month , setMonth] = useState('')
-    const limit = 350000;
+    const [month , setMonth] = useState('');
     const months = ['January','February','March','April','May','June','July','August','September','October','November','December']
     useEffect(()=>{
         const now = new Date(Date.now());
@@ -49,7 +48,7 @@ const GoalAnalysis = ({expenses}) => {
                 
 
                 <div className="flex flex-col w-full h-[24px] bg-gray-main rounded-full p-0.5 border border-black-main">
-                    <BorderLinearProgress variant="determinate" value={totalSpent} />
+                    <BorderLinearProgress variant="determinate" value={totalSpent > 100 ? 100 : totalSpent} />
                 </div>
                 <div className="flex flex-row justify-end">
                     <span className="h-full text-sm">{`Limit: $${limit}`}</span>

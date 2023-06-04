@@ -13,7 +13,7 @@ const List = ({expenses , categories , selectedExpense , setSelectedExpense}) =>
     return (
         <div className="w-full h-full flex flex-col pt-4">
             <h1 className="text-2xl font-semibold">Last expenses</h1>
-            <div className="mt-5">
+            <div className="mt-5 flex flex-col lg:grid lg:grid-cols-4 lg:gap-2 w-full h-full">
                 { expenses.sort((a,b) => {return (b.fecha - a.fecha)}).map(item => {return (
                     <div 
                     key={item.id}

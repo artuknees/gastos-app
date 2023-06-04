@@ -10,7 +10,7 @@ import { ThemeProvider , createTheme } from '@mui/material/styles';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import { Button, IconButton, Typography } from "@mui/material";
+import { Button, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 
 
@@ -29,18 +29,33 @@ const Home = () => {
             }
         },
     });
-    const logOut = () => {
+    const logOut = () => { // logout function
         auth.signOut();
         localStorage.setItem('logged', 'false');
     }
-    
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl); // status for open
+    const handleMenu = (event) => { // click for togglin menu
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => { // close dropdown menu
+      setAnchorEl(null);
+    };
+    const handleRouteMenu = (e) => { // different options for menu
+        if(e === 'logout') {
+            logOut();
+        } else {
+            setMode(e);
+        }
+        handleClose();
+    };
    
     return(
         <div className="w-full h-screen flex flex-col">
             <ThemeProvider theme={theme}>
                 <AppBar  position="static">
                     <Toolbar>
-                    <IconButton
+                    <IconButton onClick={handleMenu}
                             size="large"
                             edge="start"
                             color="secondary"
@@ -49,6 +64,21 @@ const Home = () => {
                         >
                             <MenuIcon />
                         </IconButton>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuItem onClick={() => handleRouteMenu('summary')}>Summary</MenuItem>
+                            <MenuItem onClick={() => handleRouteMenu('add')}>Add expense</MenuItem>
+                            <MenuItem onClick={() => handleRouteMenu('report')}>Report</MenuItem>
+                            <MenuItem onClick={() => handleRouteMenu('profile')}>Profile</MenuItem>
+                            <MenuItem onClick={() => handleRouteMenu('logout')}>Logout</MenuItem>
+                        </Menu>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} color='secondary'>
                             {mode.charAt(0).toUpperCase() + mode.slice(1)}
                         </Typography>

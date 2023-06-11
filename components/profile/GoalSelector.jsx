@@ -4,7 +4,7 @@ import { getAuth } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getFirestore } from "firebase/firestore";
 import { collection , getDocs, doc , deleteDoc , query, where , updateDoc } from 'firebase/firestore';
-import { CircularProgress, ThemeProvider, createTheme } from "@mui/material";
+import { CircularProgress, InputAdornment, ThemeProvider, createTheme } from "@mui/material";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -22,6 +22,10 @@ const GoalSelector = () => {
         details: '',
         id: ''
     });
+    const [originalGoal , setOriginalGoal] = useState({
+        amount: 0,
+        details: '',
+    })
     const theme = createTheme({
         palette: {
             primary: {
@@ -38,6 +42,10 @@ const GoalSelector = () => {
                 let requestedGoal = {}; // preparo un array
                 goalGet.forEach((doc) => { // le pusheo el contenido mas su id.
                     requestedGoal = {...doc.data(),id:doc.id}
+                })
+                setOriginalGoal({
+                    amount: requestedGoal.monto,
+                    details: requestedGoal.detalle,
                 })
                 setCurrentGoal({
                     date: requestedGoal.fecha,
@@ -75,37 +83,77 @@ const GoalSelector = () => {
                     <CircularProgress style={{'color': "#FF8173"}} size={60}/> 
                 </div>
             }
-            {!isLoading && currentGoal.date > 0 ?
+            {!isLoading && currentGoal.date > 0 & originalGoal.amount > 0 ?
                 <div className="w-full flex flex-col text-black-main pt-5 items-center">
                         <h1 className="text-xl lg:text-2xl font-semibold w-full text-start">Current goal</h1>
                         <section className="w-full flex flex-col lg:flex-row">
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Amount" 
-                                variant="outlined" 
-                                placeholder={currentGoal.amount.toString()} 
-                                onChange={(e) => {setCurrentGoal({...currentGoal, amount: parseInt(e.target.value)})}} 
-                                fullWidth 
-                                className="my-4 mx-2"
-                            />
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Details" 
-                                variant="outlined" 
-                                placeholder={currentGoal.details}
-                                onChange={(e) => {setCurrentGoal({...currentGoal, details: e.target.value})}} 
-                                fullWidth 
-                                className="my-4 mx-2"
-                            />
+                        <ThemeProvider theme={theme}>
+                                <TextField 
+                                    id="outlined-basic" 
+                                    label="Amount"
+                                    value={originalGoal.amount.toString()}
+                                    variant="outlined" 
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                        readOnly: true
+                                    }}
+                                    focused={true}
+                                    fullWidth 
+                                    sx={{my: '16px' , mx: {lg: '8px'}}}
+                                />
+                                <TextField 
+                                    id="outlined-basic" 
+                                    label="Details" 
+                                    value={originalGoal.details}
+                                    variant="outlined" 
+                                    InputProps={{
+                                        readOnly: true
+                                    }}
+                                    focused={true}
+                                    fullWidth 
+                                    sx={{my: '16px' , mx: {lg: '8px'}}}
+                                />
+                            </ThemeProvider>
+                        </section>
+                        <h1 className="text-xl lg:text-2xl font-semibold w-full text-start mt-4">Set new goal</h1>
+                        <section className="w-full flex flex-col lg:flex-row">
+                            <ThemeProvider theme={theme}>
+                                <TextField 
+                                    id="outlined-basic" 
+                                    label="Amount" 
+                                    variant="outlined" 
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                        type: 'number'
+                                    }}
+                                    onChange={(e) => {setCurrentGoal({...currentGoal, amount: parseInt(e.target.value)})}} 
+                                    fullWidth 
+                                    sx={{my: '16px' , mx: {lg: '8px'}}}
+                                />
+                                <TextField 
+                                    id="outlined-basic" 
+                                    label="Details" 
+                                    variant="outlined" 
+                                    InputProps={{
+                                        type: 'string'
+                                    }}
+                                    onChange={(e) => {setCurrentGoal({...currentGoal, details: e.target.value})}} 
+                                    fullWidth 
+                                    sx={{my: '16px' , mx: {lg: '8px'}}}
+                                />
+                            </ThemeProvider>
+
                         </section>
                         <ThemeProvider theme={theme}>
                             <Button
                                 variant="contained" 
                                 color="primary" 
-                                className="bg-red-main text-gray-main w-full lg:w-1/3 mt-4"
+                                className="bg-red-main"
                                 onClick={() => {handleChangeLimit()}}
+                                sx={{mt: '16px' , width: {lg: '1/3'} , color: '#F3F3F2'}}
+                                fullWidth
                             >
-                                Contained
+                                Save goal
                             </Button>
                         </ThemeProvider>
                         { editionLoading && 

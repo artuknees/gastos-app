@@ -32,6 +32,11 @@ module.exports = {
         'red-main': '#FF8173',
         'blue-main': '#5989FF',
         'black-main': '#170D21',
+        'purple-main': '#A573FF',
+        'green-mian': '#7FFF94',
+        'pink-main':  '#FFB1CD',
+        'orange-main':  '#FF9C66',
+        'teal-main': '#64FFD1'
       },
     },
   },

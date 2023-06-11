@@ -10,6 +10,8 @@ import GoalAnalysis from "./GoalAnalysis";
 import Swal from "sweetalert2";
 import DistributionChart from "./DistributionChart";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import BarChartCurrent from "./BarChartCurrent";
+import ChartsSection from "./ChartsSection";
 
 const Summary = ({}) => {
     const app = initFirebase();
@@ -78,14 +80,12 @@ const Summary = ({}) => {
                     <CircularProgress style={{'color': "#FF8173"}} size={60}/> 
                 </div>
             }
-            { !isLoading && categories.length > 0 && expenses.length > 0 ?
+            { !isLoading && categories.length > 0 && expenses.length > 0 &&
                 <div className="flex flex-col w-full pb-5 items-center">
                     <GoalAnalysis expenses={expenses} limit={limit}/>
-                    <section className="w-full h-fit flex flex-col lg:flex-row">
-                        <DistributionChart expenses={expenses} categories={categories}/>
-                        <div className="w-full h-inherit lg:w-1/3 flex flex-col items-center justify-center bg-yellow-200">Second graph</div>
-                        <div className="w-full h-inherit lg:w-1/3 flex flex-col items-center justify-center bg-green-200">Third graph</div>
-                    </section>
+                    <ChartsSection expenses={expenses} categories={categories}/>
+                    {/* <DistributionChart expenses={expenses} categories={categories}/>
+                    <BarChartCurrent expenses={expenses} categories={categories}/> */}
                     <List categories={categories} expenses={displayExpense} selectedExpense={selectedExpense} setSelectedExpense={setSelectedExpense}/>
                     {expenses.length > amountOfDisplay && 
                         <div className="flex flex-col w-full items-end justify-center text-black-main underline cursor-pointer" onClick={() => setAmountOfDisplay(amountOfDisplay + 10)}>
@@ -94,7 +94,8 @@ const Summary = ({}) => {
                     }
                     {selectedExpense !== '' && <button className='mt-10 h-[45px] w-full bg-red-main rounded-full text-gray-main shadow-lg' onClick={()=> handleDeleteExpense(selectedExpense)}>Delete expense</button>}
                 </div>
-            : 
+            }
+            { categories.length === 0 && expenses.length === 0 && !isLoading > 0 &&
             <div className="flex flex-col w-full pt-5 items-center justify-center w-full h-full text-black-main">
                 <h1 className="text-xl lg:text-2xl font-semibold">No info to show</h1>
                 <ErrorOutlineIcon fontSize="large"/>

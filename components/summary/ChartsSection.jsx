@@ -102,7 +102,7 @@ const ChartsSection = ({expenses , categories}) => {
     },[expenses]);
 
     return(
-        <section className="w-full h-fit flex flex-col lg:flex-row lg:px-8 mt-8">
+        <section className="w-full lg:max-h-[500px] h-fit flex flex-col lg:flex-row lg:px-8 mt-8">
             {donnutData?.datasets && donnutOptions?.plugins && barData?.datasets && barOptions?.plugins && 
                 <>
                     <DistributionChart donnutData={donnutData} donnutOptions={donnutOptions}/>
